@@ -1,6 +1,6 @@
 # Creator Link Store Frontend
 
-React + Vite client for the Creator Store admin and public storefront. It expects the API at `http://localhost:8080` during Vite development and runs at `http://localhost:5173`.
+React + Vite client for the Creator Store admin and public storefront. It expects the API at `http://localhost:8080` during Vite development and runs at `http://localhost:5173`. Requires **Node.js 20.19+ or 22.12+** (the Vite/rolldown toolchain doesn't run on Node 18).
 
 ```bash
 npm install
@@ -8,9 +8,17 @@ npm test
 npm run dev
 ```
 
-The admin starts at `/dashboard/` and implements Home, My Store, Success, Income, Analytics, Customers, Community, More, and Settings. The demo public page is `/alex`; an unknown handle displays registration. The UI is an original design informed by the supplied observable feature reference; it does not contain Stan source or branding.
+The admin lives at `/dashboard/*` (Home, My Store, Success, Income, Analytics, Customers, Community, More, Settings) and requires logging in first — see Authentication below. The demo public page is `/alex`; an unknown handle displays registration. The UI is an original design informed by the supplied observable feature reference; it does not contain Stan source or branding.
 
 Money is displayed as INR using Indian formatting and prices are sent as paise (`priceSubunits`). Real payment surfaces are explicitly labeled. A public purchase requests an idempotent server-side checkout; disabled/misconfigured providers show that no charge was attempted. Razorpay Checkout is loaded only after the API returns a real order, and Stripe is an optional redirect strategy.
+
+## Authentication
+
+`/login` and the registration form (shown automatically for any unclaimed storefront handle) are the two entry points. A successful login sets an httpOnly session cookie; `App` checks `GET /api/auth/me` on load and redirects unauthenticated `/dashboard/*` visits to `/login`. There's no client-side token storage to manage — the browser handles the cookie automatically on every `request()` call (`credentials:'include'`).
+
+## Buyer access pages
+
+After a successful purchase, the buyer lands on (or is given) a `/access/{token}` link — no buyer account needed. It renders differently per product type: file downloads, course curriculum with progress tracking, booking confirmation, webinar join link, membership status, or a community invite link, driven entirely by what `GET /api/buyer/access/{token}` returns.
 
 For the complete three-container workflow, start with the [infrastructure repository](https://github.com/kvsram/creator-link-store-infrastructure). Its bootstrap script clones all missing siblings, validates the laptop, starts the three containers, and runs the supported-contract smoke test. Its feature-parity matrix is the source of truth for what is complete versus a UI/API foundation.
 
