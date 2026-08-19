@@ -36,11 +36,11 @@ function App(){
       <nav>{nav.map(([id,icon,label])=><button key={id} className={section===id?'active':''} onClick={()=>go(id)}><i>{icon}</i>{label}{id==='success'&&<em>New</em>}</button>)}</nav>
       <div className="account"><div className="avatar small">{me.handle[0].toUpperCase()}</div><span><b>{me.displayName}</b><small>@{me.handle}</small></span><button className="icon-button" onClick={logout} aria-label="Log out">⏻</button></div>
     </aside>
-    <main className="workspace"><Topbar section={section}/><Section key={section} id={section} me={me} go={go}/></main>
+    <main className="workspace"><Topbar section={section} me={me}/><Section key={section} id={section} me={me} go={go}/></main>
   </div>
 }
 
-function Topbar({section}){return <header className="topbar"><div><span className="eyebrow">Workspace</span><b>{nav.find(x=>x[0]===section)?.[2]||section}</b></div><div className="top-actions"><a href="/alex" target="_blank">View store ↗</a><button className="icon-button" aria-label="Notifications">♢</button></div></header>}
+function Topbar({section,me}){return <header className="topbar"><div><span className="eyebrow">Workspace</span><b>{nav.find(x=>x[0]===section)?.[2]||section}</b></div><div className="top-actions"><a href={`/${me.handle}`} target="_blank">View store ↗</a><button className="icon-button" aria-label="Notifications">♢</button></div></header>}
 
 function Section({id,me,go}){
   const endpoints={home:'dashboard',store:'store',success:'success',income:'income',analytics:'analytics',customers:'customers',more:'more',settings:'settings'};
@@ -75,7 +75,7 @@ function Home({data,me,go}){const m=data.metrics;return <>
 function Store({data,reload,me}){const [tab,setTab]=useState('Store'),[open,setOpen]=useState(false),[editing,setEditing]=useState(null),[menuId,setMenuId]=useState(null);
   const setStatus=async(p,status)=>{setMenuId(null);await request(`/api/v1/products/${p.id}`,{method:'PATCH',body:JSON.stringify({status})});reload()};
   return <>
-  <PageHead title="My Store" subtitle="Build, organize, and publish your offers." actions={<><a className="button secondary" href="/alex" target="_blank">Preview</a><button className="primary" onClick={()=>setOpen(true)}>＋ Add product</button></>}/>
+  <PageHead title="My Store" subtitle="Build, organize, and publish your offers." actions={<><a className="button secondary" href={`/${me.handle}`} target="_blank">Preview</a><button className="primary" onClick={()=>setOpen(true)}>＋ Add product</button></>}/>
   <div className="tabs">{['Store','Landing Pages','Edit Design'].map(x=><button className={tab===x?'selected':''} onClick={()=>setTab(x)} key={x}>{x}</button>)}</div>
   {tab==='Store'?<div className="store-layout"><section className="panel"><div className="store-profile"><div className="avatar">{me.handle[0].toUpperCase()}</div><div><h2>{data.store.title}</h2><p>Systems and templates for independent creators.</p></div><span className="pill">{data.store.published?'Published':'Draft'}</span></div><h3>Products</h3><div className="product-list">{data.products.map(p=><article key={p.id}><div className="product-art">{p.type==='meeting'?'◷':'▤'}</div><div><b>{p.title}</b><small>{p.type.replaceAll('-',' ')} · {money(p.price_subunits,data.store.currency)}</small></div><span className={`status ${p.status}`}>{p.status}</span><div className="menu-wrap"><button className="icon-button" onClick={()=>setMenuId(menuId===p.id?null:p.id)}>•••</button>{menuId===p.id&&<div className="dropdown"><button onClick={()=>{setMenuId(null);setEditing(p)}}>Edit</button>{p.status!=='published'&&<button onClick={()=>setStatus(p,'published')}>Publish</button>}{p.status==='published'&&<button onClick={()=>setStatus(p,'draft')}>Unpublish</button>}{p.status!=='archived'&&<button onClick={()=>setStatus(p,'archived')}>Archive</button>}</div>}</div></article>)}</div></section><PhonePreview products={data.products} currency={data.store.currency} me={me}/></div>:<State title={`${tab} editor`} body="This production boundary has its own persisted model; the MVP exposes the tab and keeps the editor isolated for the next implementation slice."/>}
   {open&&<ProductModal types={data.product_types} close={()=>setOpen(false)} saved={()=>{setOpen(false);reload()}}/>}
