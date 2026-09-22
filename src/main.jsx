@@ -122,7 +122,7 @@ const THEMES=[
   {id:'botanical',tag:'Calm & grounded',font:'Fraunces'},
   {id:'editorial',tag:'Premium & timeless',font:'Playfair Display'}];
 
-function ThemePicker({value,onPick,disabled}){return <div className="theme-grid">{THEMES.map(t=><button key={t.id} type="button" className={`theme-card theme-${t.id} ${value===t.id?'selected':''}`} onClick={()=>onPick(t.id)} disabled={disabled}><div className="theme-card-swatch" style={{fontFamily:t.font}}><span>Aa</span></div><div className="theme-card-label"><b>{t.id}</b><small>{t.tag}</small></div></button>)}</div>}
+function ThemePicker({value,onPick,disabled}){return <div className="theme-grid">{THEMES.map(t=><button key={t.id} type="button" className={`theme-card ${value===t.id?'selected':''}`} onClick={()=>onPick(t.id)} disabled={disabled}><div className="theme-card-mock" data-theme={t.id}><div className="mock-avatar"></div><div className="mock-name">Your Store</div><div className="mock-row"><span/></div><div className="mock-row"><span/></div></div><div className="theme-card-label"><b>{t.id}</b><small>{t.tag}</small></div></button>)}</div>}
 
 function EditDesign({store,reload}){const [saving,setSaving]=useState(false);const pick=async theme=>{setSaving(true);await request('/api/v1/settings/store',{method:'PATCH',body:JSON.stringify({theme})});setSaving(false);reload()};return <section className="panel"><h2>Store theme</h2><p className="muted">Pick a look for your public storefront and preview — updates everywhere instantly.</p><ThemePicker value={store.theme} onPick={pick} disabled={saving}/></section>}
 

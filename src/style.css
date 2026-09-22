@@ -18,20 +18,18 @@
 [data-theme="editorial"]{--purple:#1c1917;--purple-dark:#000;--soft:#e7e5e4;--font-heading:'Playfair Display'}
 [data-theme] h1,[data-theme] .public-profile h1,[data-theme] .public-products h2,[data-theme] .mini-product b,[data-theme] .phone-profile b,[data-theme] .page-title{font-family:var(--font-heading,Manrope),Manrope,sans-serif}
 
-.theme-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;margin-top:14px}
-.theme-card{border:2px solid var(--line);border-radius:14px;overflow:hidden;cursor:pointer;background:#fff;text-align:left;padding:0}
-.theme-card.selected{border-color:var(--ink)}
-.theme-card-swatch{height:70px;display:flex;align-items:center;justify-content:center;position:relative}
-.theme-card-swatch span{font-size:20px;font-weight:700;color:#fff}
+.theme-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:16px;margin-top:14px}
+.theme-card{border:2px solid var(--line);border-radius:16px;overflow:hidden;cursor:pointer;background:#fff;text-align:left;padding:0;transition:transform .12s,box-shadow .12s}
+.theme-card:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(0,0,0,.08)}
+.theme-card.selected{border-color:var(--ink);box-shadow:0 0 0 3px rgba(0,0,0,.06)}
+.theme-card-mock{padding:18px 14px 14px;display:flex;flex-direction:column;align-items:center;gap:8px;background:var(--soft,#f4f4f5)}
+.theme-card-mock .mock-avatar{width:32px;height:32px;border-radius:50%;background:var(--purple,#6842d7);box-shadow:0 3px 8px rgba(0,0,0,.15)}
+.theme-card-mock .mock-name{font-family:var(--font-heading,Manrope),Manrope,sans-serif;font-weight:700;font-size:12px;color:var(--ink)}
+.theme-card-mock .mock-row{width:100%;height:18px;border-radius:6px;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.08);display:flex;align-items:center;padding:0 6px}
+.theme-card-mock .mock-row span{margin-left:auto;width:16px;height:9px;border-radius:3px;background:var(--purple,#6842d7)}
 .theme-card-label{padding:10px 12px}
 .theme-card-label b{display:block;text-transform:capitalize;font-size:13px}
 .theme-card-label small{color:var(--muted);font-size:11px}
-.theme-bold .theme-card-swatch{background:linear-gradient(135deg,#8e6bff,#5932c9)}
-.theme-minimal .theme-card-swatch{background:linear-gradient(135deg,#3f3f46,#0a0a0a)}
-.theme-sunset .theme-card-swatch{background:linear-gradient(135deg,#fb923c,#c2410c)}
-.theme-ocean .theme-card-swatch{background:linear-gradient(135deg,#22d3ee,#0e7490)}
-.theme-botanical .theme-card-swatch{background:linear-gradient(135deg,#4ade80,#14532d)}
-.theme-editorial .theme-card-swatch{background:linear-gradient(135deg,#57534e,#0c0a09)}
 
 .product-builder{display:grid;grid-template-columns:1fr 300px;gap:22px}
 .builder-form{display:grid;gap:14px}
